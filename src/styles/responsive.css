@@ -1,0 +1,142 @@
+/* =========================
+   Responsive Utilities
+   ========================= */
+
+/* ฟอนต์ฐาน + กัน iOS auto-zoom */
+:root{
+  --fs-base: clamp(15px, 1.4vw, 16px);
+  --fs-h3: clamp(18px, 2.4vw, 22px);
+  --touch-min: 44px;
+
+  /* Sidebar Layout Vars */
+  --sidebar-expanded: 280px;
+  --sidebar-rail: 72px;
+  --sidebar-w: var(--sidebar-expanded);
+}
+html, body { font-size: var(--fs-base); }
+input, select, textarea, button { font-size: 16px; }
+button, .btn, .input { min-height: var(--touch-min); }
+
+/* ===== Grid Utils ===== */
+.rgrid-4{ display:grid; gap:12px; grid-template-columns:repeat(4,minmax(0,1fr)); }
+@media (max-width:1024px){ .rgrid-4{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width:768px){ .rgrid-4{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:480px){ .rgrid-4{ grid-template-columns:1fr; } }
+
+/* ===== ตาราง ===== */
+.att-wrap{ overflow-x:auto; position:relative; }
+.att-table{ width:100%; border-collapse:collapse; }
+@media (max-width:640px){
+  .att-table th:nth-child(3), .att-table td:nth-child(3),
+  .att-table th:nth-child(4), .att-table td:nth-child(4){ display:none; }
+}
+.att-table th.__actions, .att-table td.__actions{
+  position:sticky; right:0; background:#fff; z-index:2;
+}
+.att-wrap::after{
+  content:""; position:absolute; top:0; right:0; width:24px; height:100%;
+  pointer-events:none; background:linear-gradient(90deg, rgba(255,255,255,0) 0%, #fff 70%);
+}
+@media (max-width:480px){ .btn-text{ display:none; } }
+
+/* =========================
+   App Layout (push content by sidebar width)
+   ========================= */
+.layout{ /* ค่าปกติ = กางเต็ม */
+  --sidebar-w: var(--sidebar-expanded);
+}
+.layout.is-rail{
+  --sidebar-w: var(--sidebar-rail);
+}
+main{
+  margin-left: var(--sidebar-w);
+  transition: margin-left .25s ease;
+}
+
+/* =========================
+   Sidebar – Desktop
+   ========================= */
+.sidebar{
+  position: fixed; left:0; top:0; bottom:0;
+  width: var(--sidebar-w);
+  background:#0b1221; color:#e5e7eb;
+  transition: width .25s ease, transform .25s ease;
+  overflow:hidden; z-index:30; box-sizing:border-box;
+  padding: 18px;
+}
+.sidebar .brand{ font-size:22px; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sidebar nav{ display:grid; gap:6px; margin-top:10px; }
+.side-item{
+  display:flex; align-items:center; gap:12px;
+  padding:10px 12px; border-radius:12px; color:#e5e7eb; text-decoration:none;
+}
+.side-item:hover{ background:#111827; }
+.side-item.active{ background:#1f2a44; }
+.side-icon{ width:22px; height:22px; display:grid; place-items:center; flex:0 0 22px; color:#cbd5e1; }
+.side-label{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.layout.is-rail .side-label{ display:none; }                 /* โหมดราง: ซ่อนตัวหนังสือ */
+.layout.is-rail .side-item{ justify-content:center; padding:10px 0; }  /* จัดกลางเฉพาะไอคอน */
+
+/* ปุ่มพับ/กาง เฉพาะเดสก์ท็อป (อยู่ในหัวข้อด้านบนของ sidebar) */
+.side-toggle-desktop{
+  display:inline-grid; place-items:center;
+  width:38px; height:38px; border:0; border-radius:12px;
+  background:#1f2937; color:#fff; cursor:pointer;
+  box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+
+/* ปุ่มลอย "เปิดเมนู" นอกเมนู (โผล่ตอนเป็นราง) */
+.edge-toggle-desktop{
+  position: fixed; top: 14px; left: calc(var(--sidebar-w) + 10px);
+  width:40px; height:40px; border:0; border-radius:12px;
+  background:#1f2937; color:#fff; box-shadow:0 8px 24px rgba(0,0,0,.25);
+  z-index:31; display:none; place-items:center; cursor:pointer;
+}
+.layout.is-rail .edge-toggle-desktop{ display:inline-grid; }
+
+/* =========================
+   Sidebar – Mobile / Tablet (<=768)
+   ========================= */
+.edge-toggle, .side-toggle-mobile{ display:none; } /* default hidden */
+
+@media (max-width:768px){
+  /* บนมือถือ main ไม่ถูกดัน */
+  .layout{ --sidebar-w: 0px; }
+  main{ margin-left:0 !important; }
+
+  /* Drawer */
+  .sidebar{
+    width: 280px;
+    transform: translateX(-100%);
+    padding: 18px;
+  }
+  .layout.is-open .sidebar{ transform: translateX(0); }
+
+  .side-toggle-desktop{ display:none; } /* ปุ่มพับของเดสก์ท็อป ซ่อน */
+  .side-label{ display:inline; }        /* แสดงป้ายชื่อบนมือถือเสมอ */
+
+  /* backdrop */
+  .sidebar-backdrop{
+    position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:29;
+  }
+
+  /* ปุ่มปิด X ข้างใน Drawer */
+  .side-toggle-mobile{
+    display:grid; place-items:center;
+    position:absolute; top:10px; right:10px;
+    width:40px; height:40px; border:0; border-radius:12px;
+    background:#1f2937; color:#fff; box-shadow:0 4px 16px rgba(0,0,0,.25);
+  }
+
+  /* ปุ่มเปิดเมนูขอบซ้าย */
+  .edge-toggle{
+    display:inline-grid; place-items:center;
+    position: fixed;
+    top: max(12px, env(safe-area-inset-top, 0px));
+    left: max(12px, env(safe-area-inset-left, 0px));
+    width:44px; height:44px; border:0; border-radius:12px;
+    background:#1f2937; color:#fff; box-shadow:0 8px 24px rgba(0,0,0,.25);
+    z-index:32; cursor:pointer;
+  }
+}

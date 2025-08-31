@@ -1,0 +1,112 @@
+/* ===== Base / Reset (คงน้ำหนักเบา) ===== */
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body { margin: 0; color: var(--text); background: var(--bg); }
+button, input, select, textarea { font: inherit; }
+
+/* ===== Layout ===== */
+.container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+.page-title { margin: 8px 0 16px; font-size: 24px; font-weight: 800; }
+.page-subtitle { margin: 0 0 12px; font-size: 14px; color: var(--muted); }
+
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 8px 30px rgba(2,6,23,.06);
+}
+
+/* grid helpers */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+@media (max-width: 720px) { .form-grid { grid-template-columns: 1fr; } }
+.row { display: flex; gap: 12px; align-items: center; }
+.stack > * + * { margin-top: 10px; }
+
+/* ===== Form ===== */
+.label { font-size: 14px; font-weight: 600; }
+.input, .select, .textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  outline: none;
+  height: 36px;
+  line-height: 24px;
+}
+.textarea { min-height: 96px; resize: vertical; height: auto; }
+.input:focus, .select:focus, .textarea:focus {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ring) 35%, transparent);
+}
+.input[disabled], .select[disabled], .textarea[disabled] {
+  background: #f8fafc; color: #9ca3af; cursor: not-allowed;
+}
+
+/* group input + button (เช่น รหัสผ่าน + ปุ่มแสดง/ซ่อน) */
+.input-group { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
+
+/* ===== Buttons ===== */
+.btn {
+  appearance: none;
+  border: 1px solid transparent;
+  background: var(--primary);
+  color: #fff;
+  padding: 10px 14px;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(79,70,229,.25);
+  transition: transform .05s ease, background .15s ease, box-shadow .15s ease, opacity .15s;
+}
+.btn:hover { background: var(--primary-600); }
+.btn:active { transform: translateY(1px); }
+.btn[disabled] { opacity: .6; cursor: not-allowed; box-shadow: none; }
+
+.btn.secondary {
+  background: #fff; color: var(--text);
+  border-color: var(--border); box-shadow: none;
+}
+.btn.secondary:hover { background: #f8fafc; }
+.btn.danger { background: var(--danger); box-shadow: 0 6px 18px rgba(239,68,68,.25); }
+.btn.sm { padding: 6px 10px; border-radius: 8px; }
+.btn.block { width: 100%; }
+
+.actions { display: flex; gap: 10px; margin-top: 12px; }
+
+/* ===== Table ===== */
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: 8px 6px; }
+.table th { text-align: left; border-bottom: 1px solid var(--border); font-weight: 700; font-size: 14px; }
+.table td { border-bottom: 1px solid #f3f4f6; font-size: 14px; }
+.table tr:hover td { background: #fafafa; }
+
+/* ===== Status Chip (สำหรับสถานะเข้า–ออก) ===== */
+.chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 20px;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+.chip--green  { background: #dcfce7; color: #166534; border-color: #bbf7d0; }   /* เข้า / ออก */
+.chip--yellow { background: #fef9c3; color: #92400e; border-color: #fde68a; }   /* มาสาย */
+.chip--gray   { background: #e5e7eb; color: #374151; border-color: #d1d5db; }   /* ยังไม่เข้า */
+.chip--red    { background: #fee2e2; color: #991b1b; border-color: #fecaca; }   /* ขาด */
+.chip--purple { background: #ede9fe; color: #5b21b6; border-color: #ddd6fe; }   /* ลา */
+
+/* ===== KPI grid (แดชบอร์ด) ===== */
+.kpi-grid { display: grid; gap: 12px; grid-template-columns: repeat(6, minmax(0,1fr)); }
+@media (max-width: 1024px){ .kpi-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (max-width: 640px){ .kpi-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
+/* ===== Sidebar ===== */
+.sidebar, .sidebar * { font-family: inherit; }
+
+/* ===== Utilities ===== */
+.text-muted { color: var(--muted); }
+.center { display: grid; place-items: center; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
